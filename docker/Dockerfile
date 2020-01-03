@@ -65,7 +65,8 @@ RUN echo -e "##################### set python3 as default #####################"
 RUN mkdir $AIRFLOW_HOME && \
     chmod 777 $AIRFLOW_HOME && \
     cd $AIRFLOW_HOME && \
-    adduser --disabled-password --gecos "" airflow
+    adduser --disabled-password --gecos "" airflow && \
+    mkdir -p /home/airflow/dags
 
   # install packges
 RUN python3 -m pip install --upgrade pip && \
@@ -77,4 +78,12 @@ RUN python3 -m pip install --upgrade pip && \
     pip install pyodbc && \
     pip install pandas_gbq && \
     pip install flask_bcrypt && \
-    pip install sqlalchemy==1.1.15
+    pip install sqlalchemy==1.1.15 && \
+    pip install GetOldTweets3
+
+COPY dags /home/airflow/dags/
+
+RUN airflow initdb
+
+
+
